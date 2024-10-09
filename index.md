@@ -29,17 +29,84 @@
 
 - **`columns`** – определяет набор колонок, которые будут отображены в таблице. Для каждой колонки можно задать отображаемое название, тип данных, ширину, а также формат отображения.
 
+```javascript
+columns: [
+  {
+    displayProperty: 'name',
+    width: '1fr',
+    template: 'wml!path/to/template'
+  },
+  {
+    displayProperty: 'age',
+    width: '50px'
+  }
+]
+
+```
+
 - **`source`** – источник данных для таблицы. Это может быть массив данных или контроллер, который загружает данные асинхронно.
+
+```javascript
+source: new Memory({
+  keyProperty: 'id',
+  data: [
+    {id: 1, name: 'John', age: 30},
+    {id: 2, name: 'Jane', age: 25}
+  ]
+})
+
+```
 
 - **`keyProperty`** – уникальный идентификатор строки. Он используется для отслеживания состояния строк, таких как выбор или разворачивание.
 
+```javascript
+keyProperty: 'id'
+
+```
+
 - **`multiSelectVisibility`** – определяет, будет ли отображаться чекбокс для выбора нескольких строк. Может принимать значения `'visible'`, `'onhover'` или `'hidden'`.
 
+```javascript
+multiSelectVisibility: 'visible'
+
+```
+
 - **`header`** – определяет заголовки для каждой колонки. Это может быть массив строк или набор настроек для каждой колонки.
+
+```javascript
+header: [
+  { title: 'Name' },
+  { title: 'Age' }
+]
+
+```
+
+**Пример использования:**
+
+```javascript
+<Controls.grid:View
+    source="{{_viewSource}}"
+    keyProperty="id"
+    columns="{{_columns}}"
+    multiSelectVisibility="onhover"
+    header="{{_header}}"
+/>
+
+```
 
 ### Расширенные возможности:
 
 - **Custom Templates:** Контрол позволяет использовать пользовательские шаблоны для отображения данных в ячейках. Это может быть полезно, если необходимо кастомизировать отображение данных (например, добавление иконок, кнопок и т.д.).
+
+```javascript
+columns: [
+  {
+    displayProperty: 'name',
+    template: 'wml!path/to/customTemplate'
+  }
+]
+
+```
 
 - **Drag-and-Drop:** Поддержка перетаскивания строк (drag-and-drop) между таблицами или внутри одной таблицы, что может быть полезно для изменения порядка строк или для перемещения данных.
 
@@ -56,11 +123,10 @@
 ```TypeScript
 // Импортируем шаблоны для отображения ячеек с результатами (если требуется)
 import * as numberResultTpl from 'wml!Controls-demo/gridNew/resources/ResultCellTemplates/Number';
-import * as coloredNumberResultTpl from 'wml!Controls-demo/gridNew/resources/ResultCellTemplates/ColoredNumber';
 
 // Импортируем интерфейсы для колонок и данных
 import { IColumn, IHeaderCell } from 'Controls/grid';
-import { Enum } from 'Types/collection';
+
 ```
 #### Шаг 2. Подготовка данных
 Создаем массив данных для отображения информации о городах. В этом примере будут указаны город, страна, численность населения и площадь.
