@@ -45,7 +45,177 @@
 
 - **Разноуровневый выбор:** Возможность выбирать как отдельные строки, так и группы строк. Поддерживается выбор нескольких элементов одновременно.
 
-Используйте ссылки ниже, чтобы найти нужную информацию.
+#
+
+### Пример создания и настройки таблицы
+
+В этой инструкции рассмотрим, как создать таблицу с данными о городах, используя компонент "Таблица".
+
+#### Шаг 1. Импорт необходимых модулей
+
+```TypeScript
+// Импортируем шаблоны для отображения ячеек с результатами (если требуется)
+import * as numberResultTpl from 'wml!Controls-demo/gridNew/resources/ResultCellTemplates/Number';
+import * as coloredNumberResultTpl from 'wml!Controls-demo/gridNew/resources/ResultCellTemplates/ColoredNumber';
+
+// Импортируем интерфейсы для колонок и данных
+import { IColumn, IHeaderCell } from 'Controls/grid';
+import { Enum } from 'Types/collection';
+```
+#### Шаг 2. Подготовка данных
+Создаем массив данных для отображения информации о городах. В этом примере будут указаны город, страна, численность населения и площадь.
+
+```TypeScript
+// Список городов и их характеристик
+const CITIES = [
+    {
+        key: 1,
+        city: 'Москва',
+        country: 'Россия',
+        population: 12655050,
+        area: 2561,
+    },
+    {
+        key: 2,
+        city: 'Нью-Йорк',
+        country: 'США',
+        population: 8419600,
+        area: 789,
+    },
+    {
+        key: 3,
+        city: 'Пекин',
+        country: 'Китай',
+        population: 21540000,
+        area: 16410,
+    },
+    {
+        key: 4,
+        city: 'Сидней',
+        country: 'Австралия',
+        population: 5312163,
+        area: 12368,
+    },
+];
+```
+
+#### Шаг 3. Определение колонок
+Задаем колонки, которые будут отображаться в таблице.
+
+```TypeScript
+// Определяем колонки для таблицы
+const columns: IColumn[] = [
+    { displayProperty: 'city', caption: 'Город' }, // Отображение названия города
+    { displayProperty: 'country', caption: 'Страна' }, // Отображение страны
+    { displayProperty: 'population', caption: 'Население', resultTemplate: numberResultTpl }, // Население
+    { displayProperty: 'area', caption: 'Площадь (км²)', resultTemplate: numberResultTpl }, // Площадь
+];
+
+```
+
+#### Шаг 4. Определение заголовков таблицы
+Задаем заголовки для каждой из колонок.
+
+```TypeScript
+// Определяем заголовки для колонок
+const header: IHeaderCell[] = [
+    { caption: 'Город' },
+    { caption: 'Страна' },
+    { caption: 'Население' },
+    { caption: 'Площадь (км²)' },
+];
+
+```
+
+#### Шаг 5. Отображение таблицы
+Теперь можно интегрировать данные и колонки в компонент таблицы.
+
+```TypeScript
+// Компонент таблицы с данными
+<Controls.grid:View
+    keyProperty="key" // Уникальный идентификатор для строк
+    columns="{{columns}}" // Передаем колонки
+    items="{{CITIES}}" // Передаем данные для отображения
+    header="{{header}}" // Передаем заголовки колонок
+    resultsVisibility="visible" // Включаем отображение результатов по колонкам
+    resultsPosition="bottom" // Положение итогов внизу таблицы
+/>
+
+```
+
+#### Шаг 6. Результаты
+Для колонок с числовыми данными, например "Население" и "Площадь", можно добавить отображение итогов (например, общую площадь всех городов).
+
+```TypeScript
+// Определение результатов для колонок
+const results = {
+    population: 45061613, // Общая численность населения
+    area: 31928, // Общая площадь
+};
+
+```
+
+#### Итоговый код:
+
+```TypeScript
+import * as numberResultTpl from 'wml!Controls-demo/gridNew/resources/ResultCellTemplates/Number';
+import { IColumn, IHeaderCell } from 'Controls/grid';
+
+// Данные о городах
+const CITIES = [
+    { key: 1, city: 'Москва', country: 'Россия', population: 12655050, area: 2561 },
+    { key: 2, city: 'Нью-Йорк', country: 'США', population: 8419600, area: 789 },
+    { key: 3, city: 'Пекин', country: 'Китай', population: 21540000, area: 16410 },
+    { key: 4, city: 'Сидней', country: 'Австралия', population: 5312163, area: 12368 },
+];
+
+// Колонки для таблицы
+const columns: IColumn[] = [
+    { displayProperty: 'city', caption: 'Город' },
+    { displayProperty: 'country', caption: 'Страна' },
+    { displayProperty: 'population', caption: 'Население', resultTemplate: numberResultTpl },
+    { displayProperty: 'area', caption: 'Площадь (км²)', resultTemplate: numberResultTpl },
+];
+
+// Заголовки таблицы
+const header: IHeaderCell[] = [
+    { caption: 'Город' },
+    { caption: 'Страна' },
+    { caption: 'Население' },
+    { caption: 'Площадь (км²)' },
+];
+
+// Результаты для числовых колонок
+const results = {
+    population: 45061613,
+    area: 31928,
+};
+
+// Компонент таблицы
+<Controls.grid:View
+    keyProperty="key"
+    columns="{{columns}}"
+    items="{{CITIES}}"
+    header="{{header}}"
+    resultsVisibility="visible"
+    resultsPosition="bottom"
+/>
+
+```
+
+#### Итоговый вывод:
+
+| Город    | Страна    | Население  | Площадь (км²) |
+|----------|-----------|------------|---------------|
+| Москва   | Россия    | 12,655,050 | 2,561         |
+| Нью-Йорк | США       | 8,419,600  | 789           |
+| Пекин    | Китай     | 21,540,000 | 16,410        |
+| Сидней   | Австралия | 5,312,163  | 12,368        |
+| **Итого**|           | **45,061,613** | **31,928**   |
+
+#
+
+Используйте ссылки ниже, чтобы найти нужную информацию по интерфейсу компонента:
 
 - [Опции](options.md)
 - [Поля](fields.md)
